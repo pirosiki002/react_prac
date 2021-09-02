@@ -4,16 +4,16 @@
   <body>
     <h1>Index</h1>
     <script>
-      const ob = {
+      let ob = {
         red:255, green:125, blue:0,
 
-        print: function(){
+        print(){
           document.write('<p>RED: ' + this.red + '</p>');
           document.write('<p>GREEN: ' + this.green + '</p>');
-          document.write('<p>BLUE: ' + this.blue + '</p>');
+          document.write('<p>BLUE: ' + this.blue + '</p>');          
         }
-      }
-      ob.print();
+      };
+      document.write(ob.print());
     </script>
   </body>
 </html>

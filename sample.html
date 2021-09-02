@@ -4,12 +4,15 @@
   <body>
     <h1>Index</h1>
     <script>
-      function hello(name){
-        document.write('<p>こんにちは、' + name + 'さん！</p>');
+      function hello(getName, name){
+        document.write('<p>こんにちは、' + getName(name) + 'さん！</p>');
       }
 
-      hello('たろう');
-      hello('花子');
+      // hello('たろう');
+      // hello('花子');
+      hello((name)=>{return '<b>' + name + '</b>';}, 'たろう');
+      hello((name)=>'<<<' + name + '>>>', '花子');
+
     </script>
   </body>
 </html>

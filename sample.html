@@ -4,15 +4,10 @@
   <body>
     <h1>Index</h1>
     <script>
-      function hello(getName, name){
-        document.write('<p>こんにちは、' + getName(name) + 'さん！</p>');
-      }
-
-      // hello('たろう');
-      // hello('花子');
-      hello((name)=>{return '<b>' + name + '</b>';}, 'たろう');
-      hello((name)=>'<<<' + name + '>>>', '花子');
-
+      const ob = {red:255, green:125, blue:0};
+      document.write('<p>RED: ' + ob.red + '</p>');
+      document.write('<p>GREEN: ' + ob.green + '</p>');
+      document.write('<p>BLUE: ' + ob.blue + '</p>');
     </script>
   </body>
 </html>

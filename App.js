@@ -1,16 +1,57 @@
-import './App.css';
-import MemoPage from './memo/MemoPage';
+import  usePersist  from '../Persist';
+import Memo from './Memo';
+import AddForm from './AddForm';
+import FindForm from './FindForm';
+import DelForm from './DelForm';
 
-function App(){
+function MemoPage() {
+  const [mode, setMode] = usePersist('mode', 'default');
+ 
   return (
-    <div>
-      <h1 className="bg-primary text-white display-4">React</h1>
-      <div className="container">
-        <h4 className="my-3">Memo.</h4>
-        <MemoPage />
+      <div>        
+        <h5 className="my-3">mode: {mode}</h5>
+        <div className="alert alert-primary pb-0">
+          <AddForm />
+          <FindForm />
+          <DelForm /> 
+        </div>
+        <Memo />
       </div>
-    </div>
+  //   <div>
+  //     <h5 className="my-3">mode: {mode}</h5>
+  //     <div className="alert alert-primary pb-0">
+  //       <AddForm />
+  //       <FindForm />
+  //       <DelForm />
+  //     </div>
+  //     <Memo />
+  //   </div>
   )
 }
 
-export default App;
+export default MemoPage
+
+
+// import usePersist from '../Persist';
+// import Memo from './Memo';
+// import AddForm from './AddForm';
+// import FindForm from './FindForm';
+// import DelForm from './DelForm';
+
+// function MemoPage() {
+//   const[mode, setMode] = usePersist('mode', 'default');
+
+//   return (
+//     <div>
+//       <h5 className="my-3">mode: {mode}</h5>
+//       <div className="alert alert-primary pb-0">
+//         <AddForm />
+//         <FindForm />
+//         <DelForm />
+//       </div>
+//       <Memo />
+//     </div>
+//   )
+// }
+
+// export default MemoPage;

@@ -1,23 +1,16 @@
-import Header from "./header";
-// import Link from "next/dist/client/link";
-import Link from "next/link";
- 
-export default function Other(){
-  const title = "Other";
+import Layout from '../components/layout';
+import MyImage from '../components/image';
+
+export default function Home() {
 
   return (
     <div>
-      <Header title={title} />
-      <h1 className = "bg-primary px-3 text-white display-4">React</h1>
-      <div className="container">
-        <h3 className="my-3 text-primary text-center">{title}</h3>
-        <div className="card p-3">
-          <p>これは、もう１つのページの表示です。</p>
-          <Link href="/">
-            <a>&lt;&lt; Back to Index page</a>
-          </Link>
+      <Layout header="Next.js" title="Top page.">
+        <div className = "alert alert-primary text-center">
+          <h5 className="mb-4">Welcome to next.js!</h5>
+          <MyImage fname="m_park.jpg" size="300" />
         </div>
-      </div>
+      </Layout>
     </div>
   )
 }

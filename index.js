@@ -9,7 +9,7 @@ const MoneyBook = () => {
     {date: "1/1", item: "お年玉", amount: 10000},
     {date: "1/3", item: "ケーキ", amount: -500},
     {date: "2/1", item: "小遣い", amount: 3000},
-    {date: "2/5", item: "マンガ", amount: -600}
+    {date: "2/5", item: "マンガ", amount: -700}
   ]
 
   return (
@@ -32,27 +32,15 @@ const MoneyBook = () => {
 
 const MoneyBookItem = (props) => {
   const {date, item, amount} = props.book;
-  if(amount > 0) {
     return (
       <tr>
         <td>{date}</td>
         <td>{item}</td>
-        <td>{amount}</td>
-        <td></td>
+        <td>{amount >= 0 ? amount : null}</td>
+        {/* テキストは-amountとなっているが、books配列にて-で設定済のため不要。 */}
+        <td>{amount < 0 ? amount : null}</td>
       </tr>
     )
-  }
-  else{
-    // 1つの関数内にreturnが２つあるのはマズいのでは・・・？
-    return (
-      <tr>
-        <td>{date}</td>
-        <td>{item}</td>
-        <td></td>
-        <td>{-amount}</td>
-      </tr>  
-    )
-  }
 }
 
 MoneyBookItem.prototype = {

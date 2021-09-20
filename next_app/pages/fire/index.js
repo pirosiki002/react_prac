@@ -8,39 +8,35 @@ export default function Home() {
   const [data, setData] = useState(mydata);
   const [message, setMessage] = useState('wait...');
  
-  const mydataRef = query(collection(db, "mydata"), where("name", "==", "taro"));
-
-//  const mydataRef = collection(db, "mydata");
-  const snapshot = getDocs(mydataRef);
-
   useEffect(async()=> {
 
-    const docRef = doc(db, "mydata", "2");
-    const docSnap = await getDoc(docRef);
+    const querySnapshot = await getDocs(collection(db, "mydata"));
+
     let mydata = [];
 
-    if (docSnap.exists()) {
-      console.log("Document data:", docSnap.data());
+    querySnapshot.forEach((docment) => {
+      console.log(docment.id, " => ", docment.data());
 
-    // snapshot.forEach((document)=>{
-      const doc = docSnap.data();
-      mydata.push(
-        <tr key={docSnap.id}>
-          <td><a href={'/fire/del?id=' + docSnap.id}>{docSnap.id}</a></td>
-          <td>{doc.name}</td>
-          <td>{doc.mail}</td>
-          <td>{doc.age}</td>
-        </tr>
-      )
- 
-    } else {
-      // doc.data() will be undefined in this case
-      console.log("No such document!");
-    }    
+      if (docment.exists()) {
+        console.log("Document data:", docment.data());
+  
+        const doc = docment.data();
+        mydata.push(
+          <tr key={docment.id}>
+            <td><a href={'/fire/del?id=' + docment.id}>{docment.id}</a></td>
+            <td>{doc.name}</td>
+            <td>{doc.mail}</td>
+            <td>{doc.age}</td>
+          </tr>
+        )
+   
+      } else {
+        console.log("No such document!");
+      }    
+    });
 
-      setData(mydata);
-      setMessage('Firebase data.');
-    // })
+    setData(mydata);
+    setMessage('Firebase data.');
   }, [])
 
   return (

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Layout from '../../components/layout';
-import {doc, getDoc} from "firebase/firestore";
+import {doc, getDoc, deleteDoc} from "firebase/firestore";
 import {useRouter} from 'next/router';
 import {db} from '../../components/fire';
 
@@ -26,10 +26,14 @@ export default function Delete(props) {
     }
   }, [message])
 
-  const doAction = (e)=> {
-    db.collection('mydata').doc(router.query.id).delete().then(ref=>{
-      router.push('/fire');
-    })
+  const doAction = async(e)=> {
+    // db.collection('mydata').doc(router.query.id).delete().then(ref=>{
+    //   router.push('/fire');
+    // })
+
+    await deleteDoc(doc(db, "mydata", router.query.id));
+    router.push('/fire');
+
   }
 
   return (

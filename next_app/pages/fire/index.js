@@ -1,47 +1,54 @@
 import {useState, useEffect} from 'react';
 import Layout from '../../components/layout';
-import {collection, query, where, doc, getDoc, getDocs, onSnapshot} from "firebase/firestore";
+//import firebase from 'firebase';
+import {collection, getDocs} from "firebase/firestore";
 import {db} from '../../components/fire';
+
+//const db = firebase.firestore();
 
 export default function Home() {
   const mydata = [];
   const [data, setData] = useState(mydata);
   const [message, setMessage] = useState('wait...');
 
-  const mydataRef = query(collection(db, "mydata"), where("name", "==", "taro"));
-
-  //ホットリロード
-  const unsub = onSnapshot(doc(db, "mydata", "1"), (doc) => {
-    console.log("Current data: ", doc.data());
-  });
-
-  const snapshot = getDocs(mydataRef);
-
   useEffect(async()=> {
 
-    const docRef = doc(db, "mydata", "2");
-    const docSnap = await getDoc(docRef);
+    // db.collection('mydata').get().then((snapshot)=> {
+    //   snapshot.forEach((document)=>{
+    //     const doc = document.data();
+    //     mydata.push(
+    //       // 省略
+    //     )
+    //   })
+    // })
+
+    const querySnapshot = await getDocs(collection(db, "mydata"));
+
     let mydata = [];
 
-    if (docSnap.exists()) {
-      console.log("Document data:", docSnap.data());
+    querySnapshot.forEach((docment) => {
+      console.log(docment.id, " => ", docment.data());
 
-      const doc = docSnap.data();
-      mydata.push(
-        <tr key={docSnap.id}>
-          <td><a href={'/fire/del?id=' + docSnap.id}>{docSnap.id}</a></td>
-          <td>{doc.name}</td>
-          <td>{doc.mail}</td>
-          <td>{doc.age}</td>
-        </tr>
-      )
+      if (docment.exists()) {
+        console.log("Document data:", docment.data());
+  
+        const doc = docment.data();
+        mydata.push(
+          <tr key={docment.id}>
+            <td><a href={'/fire/del?id=' + docment.id}>{docment.id}</a></td>
+            <td>{doc.name}</td>
+            <td>{doc.mail}</td>
+            <td>{doc.age}</td>
+          </tr>
+        )
+   
+      } else {
+        console.log("No such document!");
+      }    
+    });
 
-    } else {
-      console.log("No such document!");
-    }    
-
-      setData(mydata);
-      setMessage('Firebase data.');
+    setData(mydata);
+    setMessage('Firebase data.');
   }, [])
 
   return (

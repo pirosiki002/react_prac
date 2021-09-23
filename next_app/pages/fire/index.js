@@ -1,20 +1,28 @@
 import {useState, useEffect} from 'react';
 import Layout from '../../components/layout';
-import firebase from 'firebase';
+//import firebase from 'firebase';
+import {getAuth, signInWithPopup, GoogleAuthProvider} from 'firebase/auth'; //firebase9
 import {collection, getDocs} from "firebase/firestore";
 import {db} from '../../components/fire';
 
-const auth = firebase.auth();
-const provider = new firebase.auth.GoogleAuthProvider();
+//const auth = firebase.auth();
+//const provider = new firebase.auth.GoogleAuthProvider();
+const auth = getAuth(); //firebase9
+const provider = new GoogleAuthProvider(); //firebase9
 
 export default function Home() {
   const [message, setMessage] = useState('wait...');
 
   useEffect(async()=> {
-    auth.signInWithPopup(provider).then(result=> {
-      setMessage('logined:' + result.user.displayName)
-    })
-  }, [])
+    // auth.signInWithPopup(provider).then(result=> {
+    //   setMessage('logined:' + result.user.displayName)
+    // })
+    signInWithPopup(auth, provider).then((result) => {
+      setMessage('logined:' + result.user.displayName);
+    }).catch((error) => {
+      //エラー処理
+    });
+  }, []);
 
   return (
     <div>

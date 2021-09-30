@@ -2,6 +2,7 @@ import {useState, useEffect} from 'react';
 import Layout from '../../components/layout';
 import { useRouter } from 'next/router';
 //import firebase from 'firebase';
+import { collection, query, where, getDocs, getDoc, doc } from "firebase/firestore";
 import {db} from '../../components/fire';
 import {getAuth, signInWithPopup, GoogleAuthProvider, signOut} from 'firebase/auth'; //firebase9
 
@@ -68,25 +69,52 @@ export default function Index() {
   }
 
   //get and disp address data
-  useEffect(()=>{
+  useEffect(async()=>{
     if(auth.currentUser != null){
       setUser(auth.currentUser.displayName);
       setMessage(auth.currentUser.displayName + 'さんの登録アドレス');
 
-      db.colloction('address')
-        .doc(auth.currentUser.email)
-        .colloction('address').get()
-        .then((snapshot)=>{
-          snapshot.forEach((document)=> {
-            const doc = document.data();
-            addresses.push(
-              <li className="list-group-item list-group-item-action p-1" onClick={doLink} id={document.id}>
-                {doc.flag ? '√' : ''}{doc.name} ({doc.mail})
-              </li>
-            )
-          })
-          setData(addresses);
-        })
+      //Firebase8
+      // db.colloction('address')
+      //   .doc(auth.currentUser.email)
+      //   .colloction('address').get()
+      //   .then((snapshot)=>{
+      //     snapshot.forEach((document)=> {
+      //       const doc = document.data();
+      //       addresses.push(
+      //         <li className="list-group-item list-group-item-action p-1" onClick={doLink} id={document.id}>
+      //           {doc.flag ? '√' : ''}{doc.name} ({doc.mail})
+      //         </li>
+      //       )
+      //     })
+      //     setData(addresses);
+      //   })
+
+      //Firebase9
+      //コレクションのすべてのドキュメントを取得する
+      //※コレクションの中のコレクションを取得する方法が分からないので、とりあえずひとつだけ取得
+      const docRef = doc(db, "address", "8Bj5ALMLKueU8yWz6s6A", "address", "uiBMPAOyNKj4W9oXUs35");
+      console.log("testes");
+      //auth.currentUser
+
+      const docSnap = await getDoc(docRef);
+
+      if(docSnap.exists()) {
+        console.log("Document data:", docSnap.data());
+        console.log("name = ", docSnap.data().mail);
+
+        const doc = docSnap.data();
+
+        addresses.push(
+          <li className="list-group-item list-group-item-action p-1" onClick={doLink} id={docSnap.id}>
+            {doc.flag ? '√' : ''}{doc.name} ({doc.mail})
+          </li>
+        )
+      }
+      else{
+        console.log("No such document!");
+      }
+
     }
     else{
       addresses.push(

@@ -18,38 +18,22 @@
       let dom = document.querySelector('#root');
       let message = "React component page.";
 
-      // function component
-      function Welcome(props) {
-        return (
-          <div className="alert alert-primary">
-            <Calc classes={props.classes} number={props.number} />
-          </div>
-        )
-      }
-
-      // Calc
-      function Calc(props) {
-        let total = 0;
-
-        for(let i = 0; i <= props.number; i++){
-          total += i;
+      class Hello extends React.Component {
+        constructor(props){
+          super(props);
         }
 
-        return (
-          <p className={props.classes}>
-            1から{props.number}までの合計は{total}です。
-          </p>
-        )
+        render(){
+          return <div className="alert alert-primary">
+            <p className="h4">Hello!!</p>
+          </div>
+        }
       }
 
-      // JSX
       let el = (
         <div>
           <h5 className="mb-4">{message}</h5>
-          <Welcome number = "10" classes="h3" />
-          <Welcome number ="100" classes="h5" />
-          <Calc number ="50" classes="h4" />
-          <Calc number ="500" classes="h6" />
+          <Hello />
         </div>
       )
 

@@ -17,22 +17,42 @@
     <script type="text/babel">
       let dom = document.querySelector('#root');
       let message = "React component page.";
-      
-      // This is the function component
+
+      // function component
       function Welcome(props) {
-        return <div className= {props.alert}>
-          <p className={props.fontSize}>Hello {props.name}!!</p>
+        return (
+          <div className="alert alert-primary">
+            <Calc classes={props.classes} number={props.number} />
           </div>
+        )
       }
-      
-      // disp JSX
+
+      // Calc
+      function Calc(props) {
+        let total = 0;
+
+        for(let i = 0; i <= props.number; i++){
+          total += i;
+        }
+
+        return (
+          <p className={props.classes}>
+            1から{props.number}までの合計は{total}です。
+          </p>
+        )
+      }
+
+      // JSX
       let el = (
         <div>
-          <h5 class="mb-4">{message}</h5>
-          <Welcome name="PINO" fontSize="h2" alert="alert alert-primary"/>
-          <Welcome name="PIRO" fontSize="h5" alert="alert alert-dark"/>
-          </div>
+          <h5 className="mb-4">{message}</h5>
+          <Welcome number = "10" classes="h3" />
+          <Welcome number ="100" classes="h5" />
+          <Calc number ="50" classes="h4" />
+          <Calc number ="500" classes="h6" />
+        </div>
       )
+
       ReactDOM.render(el, dom);
     </script>
   </body>

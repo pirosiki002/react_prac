@@ -15,6 +15,11 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
+//import signIn
+import SignIn from './SignIn';
+// import signUp
+import SignUp from './SignUp';
+
 export default function Home() {
   const [age, setAge] = React.useState('');
 
@@ -66,6 +71,11 @@ export default function Home() {
       <Button variant="contained">Contained</Button>
       <Button variant="outlined">Outlined</Button>
 
+      {/* sing up */}
+      <SignUp></SignUp>
+
+      {/* sign in */}
+      <SignIn></SignIn>
 
     </div>
   )

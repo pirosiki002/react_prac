@@ -15,7 +15,8 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-
+//button
+import Button from '@mui/material/Button';
 
 //table start
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -146,7 +147,7 @@ export default function Manage() {
         </Table>
       </TableContainer>
       <br></br>
-      <Link href="./SignIn">SignIn画面に戻る</Link>
+      <Button variant="contained"><a href="./SignIn">サインイン画面に戻る</a></Button>
     </div>
   )
 }

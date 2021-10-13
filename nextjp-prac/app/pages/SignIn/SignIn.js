@@ -12,6 +12,9 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+//firebase
+import '../Components/fire';
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 function Copyright(props) {
   return (
@@ -38,40 +41,20 @@ export default function SignIn() {
       password: data.get('password'),
     });
 
-    // メールアドレスをキーに、パスワードを取得
+    const auth = getAuth();
+    signInWithEmailAndPassword(auth, data.get('email'), data.get('password'))
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
 
+        console.log('Sing in complete!');
+        {location.href='./Manage'}
 
-    //この辺の処理はいらない。↓↓↓↓ 全部Authの機能で対応可能！！
-      // 入力されたメール、パスワードと、DB上の情報が一致するかどうかを確認する
-      //お試し
-      let isMorning = true;
-      return (
-        <div>
-          {(() => {
-            if (isMorning) {
-              return (
-                <div>
-                  {console.log('Good morning')}
-                  {/* // パスワードが一致していれば画面遷移 */}
-                  {/* //管理画面に飛んでけぇ(これで大丈夫？？) */}
-                  {/* おそらくNG.この辺はテキストにあったハズ */}
-                  {location.href='./Manage'}
-                </div>
-
-              );
-            } else {
-              // 一致していなければ現在の画面に留まる
-              //メアドかパスワードが間違っていることを知らせる
-              return (
-                <div>
-                  {console.log('Mail or Pass is miss')}
-                </div>
-              )
-            }
-          })()}
-        </div>
-      );
-
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+      });
   };
 
   return (

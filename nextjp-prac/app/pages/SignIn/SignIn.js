@@ -48,7 +48,9 @@ export default function SignIn() {
         const user = userCredential.user;
 
         console.log('Sing in complete!');
-        {location.href='./Manage'}
+        //{location.href='./Manage'}
+        //router.push('../Customer');
+        {location.href='./Customer'}
 
       })
       .catch((error) => {

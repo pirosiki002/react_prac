@@ -12,6 +12,9 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+//Firebase add
+import '../pages/Components/fire';
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
 function Copyright(props) {
   return (
@@ -42,6 +45,23 @@ export default function SignUp() {
       password: data.get('password'),
     });
     // ここにFirebaseでデータを送る処理を追加
+    const auth = getAuth();
+//    createUserWithEmailAndPassword(auth, email, password)
+    createUserWithEmailAndPassword(auth, data.get('email'), data.get('password'))
+    .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        console.log('sign in complete!');
+        // ここで画面遷移処理
+        {location.href='./Customer'}
+        // router.push('./Customer');
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // ..
+      });
+
   };
 
   return (

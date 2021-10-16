@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import Link from '@mui/material/Link';
 
 import {useState, useEffect} from 'react';
-import {collection, query, where, doc, getDoc, getDocs} from "firebase/firestore";
+import {collection, query, where, doc, getDoc, getDocs, deleteDoc} from "firebase/firestore";
 import {db} from '../components/fire';
 import {getAuth, onAuthStateChanged} from "firebase/auth";
 //table
@@ -57,6 +57,9 @@ export default function Customer() {
   const [data, setData] = useState(mydata);
   const [message, setMessage] = useState('wait...');
   const [mail, setMail] = useState('mail...');
+  const [delId, delData] = useState('del data...');
+
+  //loginしていなかった場合は弾く処理を入れたい（P424参照）
 
   useEffect(async()=> {
 
@@ -93,6 +96,7 @@ export default function Customer() {
       }
     });
 
+
     const querySnapshot = await getDocs(collection(db, "customerInfo"));
 
     let mydata = [];
@@ -106,6 +110,10 @@ export default function Customer() {
         const doc = docment.data();
         mydata.push(
           <tr key={docment.id}>
+            {/* MUIに良さげなのがありそう。探す */}
+            {/* <td><input className="check" onChange={handleChange} checked={val.includes('aaa')} type="checkbox" name="lang" value={docment.id}/></td> */}
+            <td><label><input className="check" onChange={handleChange} checked={val.includes(docment.id)} type="checkbox" name="lang" value={docment.id} /></label></td>
+            {/* <td><input className="check" type="checkbox" /></td> */}
             <StyledTableCell align="left"><a href={'/fire/del?id=' + docment.id}>{docment.id}</a></StyledTableCell>
             <StyledTableCell align="left">{doc.name}</StyledTableCell>
             <StyledTableCell align="left">{doc.mail}</StyledTableCell>
@@ -121,6 +129,59 @@ export default function Customer() {
     setMessage('顧客情報一覧');
   }, [])
 
+  //データを削除する処理
+  useEffect(async()=> {
+    console.log("実際に削除するところ Id =" + delId);
+    //Idを取得できるはず。。
+    await deleteDoc(doc(db, "customerInfo", delId));
+
+  },[delId])
+
+    //check box start
+    const [val, setVal] = React.useState(['']);
+
+    //チェックボックスに変化があったときの処理
+    //const handleChange = e => {
+    const handleChange = async e => {
+
+      // change したのはいいとして、ON なのか OFF なのか判定する必要がある
+      if (val.includes(e.target.value)) {
+        // すでに含まれていれば OFF したと判断し、
+        // イベント発行元を除いた配列を set し直す
+        setVal(val.filter(item => item !== e.target.value));
+      } else {
+        // そうでなければ ON と判断し、
+        // イベント発行元を末尾に加えた配列を set し直す
+        setVal([...val, e.target.value]);
+        // state は直接は編集できない
+        // つまり val.push(e.target.value) はNG
+
+        //こっちがONの処理なので、ここでIDとか取得できたらOK
+        //引数でIDとか名前とか渡せないんだっけか？
+        console.log('id =' + e.target.value);
+
+        //この時点でIDは取得できているので、試しにポップアップを出して削除してみる
+        let result = confirm("選択したId = "+ e.target.value +"を削除します。よろしいですか？")
+
+        //Yes or No で切り分ける
+        if(result){
+          //削除処理
+          console.log("削除");
+          //await deleteDoc(doc(db, "cities", "DC"));
+          //await deleteDoc(doc(db, e.target.value, "customerInfo"));
+          //削除するIdを
+
+          const delId = e.target.value;
+          delData(delId); // 削除するIdをセット
+        }
+        else{
+          //処理なし
+          console.log("処理なし");
+        }
+      }
+    };
+    //check box end
+
   return (
     <div>
       {/* <Layout header="Next.js" title="Top page."> */}
@@ -134,10 +195,11 @@ export default function Customer() {
           <TableHead>
             <TableRow>
               {/* <StyledTableCell>Profile</StyledTableCell> */}
+              <StyledTableCell align="left"></StyledTableCell>
               <StyledTableCell align="left">ID</StyledTableCell>
-              <StyledTableCell align="left">Name</StyledTableCell>
-              <StyledTableCell align="left">Mail</StyledTableCell>
-              <StyledTableCell align="left">Age</StyledTableCell>
+              <StyledTableCell align="left">名前</StyledTableCell>
+              <StyledTableCell align="left">メール</StyledTableCell>
+              <StyledTableCell align="left">年齢</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -147,7 +209,38 @@ export default function Customer() {
       </TableContainer>
       <br></br>
       <Button variant="contained"><a href="./SignIn">サインイン画面に戻る</a></Button>
-      <Button variant="contained"><a href="./Fire/add">顧客情報追加</a></Button>
+      <Button variant="contained"><a href="./Customer/add">顧客情報追加</a></Button>
+      {/* checkbox start*/}
+        {/* <label>
+          <input
+            type="checkbox"
+            value="js"
+            onChange={handleChange}
+            checked={val.includes('js')}
+          />
+          JavaScript
+        </label>
+        <label>
+          <input
+            type="checkbox"
+            value="python"
+            onChange={handleChange}
+            checked={val.includes('python')}
+          />
+          Python
+        </label>
+        <label>
+          <input
+            type="checkbox"
+            value="java"
+            onChange={handleChange}
+            checked={val.includes('java')}
+          />
+          Java
+        </label> */}
+        <p>選択値：{val.join(', ')}</p>
+      {/* checkbox end */}
     </div>
   )
 }
+

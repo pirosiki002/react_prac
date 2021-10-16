@@ -134,50 +134,29 @@ export default function Customer() {
     console.log("実際に削除するところ Id =" + delId);
     //Idを取得できるはず。。
     await deleteDoc(doc(db, "customerInfo", delId));
-
   },[delId])
 
     //check box start
     const [val, setVal] = React.useState(['']);
 
     //チェックボックスに変化があったときの処理
-    //const handleChange = e => {
-    const handleChange = async e => {
+    const handleChange = e => {
+    //const handleChange = async e => {
 
-      // change したのはいいとして、ON なのか OFF なのか判定する必要がある
-      if (val.includes(e.target.value)) {
-        // すでに含まれていれば OFF したと判断し、
-        // イベント発行元を除いた配列を set し直す
-        setVal(val.filter(item => item !== e.target.value));
-      } else {
-        // そうでなければ ON と判断し、
-        // イベント発行元を末尾に加えた配列を set し直す
-        setVal([...val, e.target.value]);
-        // state は直接は編集できない
-        // つまり val.push(e.target.value) はNG
+      //この時点でIDは取得できているので、試しにポップアップを出して削除してみる
+      let result = confirm("選択したId = "+ e.target.value +"を削除します。よろしいですか？")
 
-        //こっちがONの処理なので、ここでIDとか取得できたらOK
-        //引数でIDとか名前とか渡せないんだっけか？
-        console.log('id =' + e.target.value);
+      if(result){
+        console.log("削除");
+        const delId = e.target.value;
+        delData(delId); // 削除するIdをセット
 
-        //この時点でIDは取得できているので、試しにポップアップを出して削除してみる
-        let result = confirm("選択したId = "+ e.target.value +"を削除します。よろしいですか？")
-
-        //Yes or No で切り分ける
-        if(result){
-          //削除処理
-          console.log("削除");
-          //await deleteDoc(doc(db, "cities", "DC"));
-          //await deleteDoc(doc(db, e.target.value, "customerInfo"));
-          //削除するIdを
-
-          const delId = e.target.value;
-          delData(delId); // 削除するIdをセット
-        }
-        else{
-          //処理なし
-          console.log("処理なし");
-        }
+        //リアルタイム画面更新の暫定対策（リロード）
+        location.reload();
+      }
+      else{
+        //処理なし
+        console.log("処理なし");
       }
     };
     //check box end
@@ -243,4 +222,3 @@ export default function Customer() {
     </div>
   )
 }
-

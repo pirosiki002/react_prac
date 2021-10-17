@@ -15,8 +15,10 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-//button
+
 import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Checkbox from '@mui/material/Checkbox';
 
 //table start
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -61,38 +63,25 @@ export default function Customer() {
 
   //loginしていなかった場合は弾く処理を入れたい（P424参照）
 
+  //データを表示する処理
   useEffect(async()=> {
 
     //現在ログインしているユーザーを取得する
     const auth = getAuth();
 
     onAuthStateChanged(auth, (user) => {
-      if (user) {
-        const uid = user.uid;
-        console.log('uid =' + uid);
+      //ユーザー情報をログで表示
+      if(user !== null) {
+        const email = user.email;
 
-        //ユーザー情報をログで表示
-        if(user !== null) {
-          const displayName = user.displayName;
-          const email = user.email;
-          const uid = user.uid;
-          console.log('Name =' + displayName);
-          console.log('email =' + email);
-          console.log('uid =' + uid);
+        //URLを取得。Sign up or Sign in以外（直リンク等）でアクセスした場合は弾く処理を入れる
+        var ref = document.referrer;
+        console.log('URL = '+ ref);
 
-          //URLを取得。Sign up or Sign in以外（直リンク等）でアクセスした場合は弾く処理を入れる
-          var ref = document.referrer;
-          console.log('URL = '+ ref);
-
-          setMail(email); // メールアドレスをセット
-
-
-        } else {
-          console.log('error user === null');
-        }
+        setMail(email); // メールアドレスをセット
 
       } else {
-
+        console.log('error user === null');
       }
     });
 
@@ -110,10 +99,8 @@ export default function Customer() {
         const doc = docment.data();
         mydata.push(
           <tr key={docment.id}>
-            {/* MUIに良さげなのがありそう。探す */}
-            {/* <td><input className="check" onChange={handleChange} checked={val.includes('aaa')} type="checkbox" name="lang" value={docment.id}/></td> */}
+            {/* <Checkbox onChange={handleChange} checked={val.includes(docment.id)} type="checkbox" name="lang" value={docment.id} /> */}
             <td><label><input className="check" onChange={handleChange} checked={val.includes(docment.id)} type="checkbox" name="lang" value={docment.id} /></label></td>
-            {/* <td><input className="check" type="checkbox" /></td> */}
             <StyledTableCell align="left"><a href={'/fire/del?id=' + docment.id}>{docment.id}</a></StyledTableCell>
             <StyledTableCell align="left">{doc.name}</StyledTableCell>
             <StyledTableCell align="left">{doc.mail}</StyledTableCell>
@@ -161,9 +148,19 @@ export default function Customer() {
     };
     //check box end
 
+    //search start
+    const buttonClick = e =>{
+      alert("検索機能は未実装です");
+    };
+    //search end
+
   return (
     <div>
       {/* <Layout header="Next.js" title="Top page."> */}
+        <div className = "search">
+          <TextField label="キーワードを入力" id="outlined-size-small" defaultValue="" size="small"/>
+          <Button variant="contained" onClick={buttonClick}>検索</Button>
+        </div>
         <div className="alert alert-primary text-center">
           <h5 className="mb-4">{message}</h5>
           <h5 className="mb-4">アカウント：{mail}</h5>
@@ -189,36 +186,6 @@ export default function Customer() {
       <br></br>
       <Button variant="contained"><a href="./SignIn">サインイン画面に戻る</a></Button>
       <Button variant="contained"><a href="./Customer/add">顧客情報追加</a></Button>
-      {/* checkbox start*/}
-        {/* <label>
-          <input
-            type="checkbox"
-            value="js"
-            onChange={handleChange}
-            checked={val.includes('js')}
-          />
-          JavaScript
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            value="python"
-            onChange={handleChange}
-            checked={val.includes('python')}
-          />
-          Python
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            value="java"
-            onChange={handleChange}
-            checked={val.includes('java')}
-          />
-          Java
-        </label> */}
-        <p>選択値：{val.join(', ')}</p>
-      {/* checkbox end */}
     </div>
   )
 }

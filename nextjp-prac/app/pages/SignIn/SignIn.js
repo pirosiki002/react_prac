@@ -41,22 +41,34 @@ export default function SignIn() {
       password: data.get('password'),
     });
 
-    const auth = getAuth();
-    signInWithEmailAndPassword(auth, data.get('email'), data.get('password'))
-      .then((userCredential) => {
-        // Signed in
-        const user = userCredential.user;
+    const email = data.get('email');
+    const password = data.get('password');
+    //サインインを押したときの処理。ここで入力チェック処理？
+    //if (!email.match(/.+@.+\..+/)) {
+    if (!email.match(/^[a-zA-Z0-9_.+-]+@([a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]*\.)+[a-zA-Z]{2,}$/)) {
+        window.alert('有効なメールアドレスを入力してください');
+    }
+    else if (!password.match(/^(?=.*?[a-z])(?=.*?\d)[a-z\d]{8,100}$/i)) {
+        window.alert('パスワードは8文字以上で、半角英数字をそれぞれ１種類以上含めてください');
+    }
+    else{
+      const auth = getAuth();
+      signInWithEmailAndPassword(auth, data.get('email'), data.get('password'))
+        .then((userCredential) => {
+          // Signed in
+          const user = userCredential.user;
 
-        console.log('Sing in complete!');
-        //{location.href='./Manage'}
-        //router.push('../Customer');
-        {location.href='./Customer'}
+          console.log('Sing in complete!');
+          //{location.href='./Manage'}
+          //router.push('../Customer');
+          {location.href='./Customer'}
 
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-      });
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+        });
+    }
   };
 
   return (
